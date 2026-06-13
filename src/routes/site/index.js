@@ -3,7 +3,7 @@ import { Hono } from 'hono'
 const site = new Hono()
 
 site.get("/", (c) => {
-	return c.redirect("https://j12tee.qzz.io")
+	return c.env.ASSETS.fetch(new Request(`https://assets.local/static/html/index.html`))
 })
 
 site.get("/:page", (c) => {

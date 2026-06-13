@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>TAPI</title>
+</head>
+
+<body>
+	<div id="content"></div>
+	<hr>
+	<font size="-1">
+		Your IP: <span id="user_ip"></span> (AS<span id="user_asn"></span>, <span id="user_city"></span>, <span
+			id="user_country"></span>)<br>
+		Current time: <span id="current-time">hh:mm:yyy dd/mm/yyyy</span> (ÂL: <span
+			id="vn-lunar-date">dd/mm/yyyy</span>)<br>
+	</font><br>
+	<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+	<script>
+		var baseTime = false;
+		var t = 300;
+		function formatLongDate(dateInput) {
+			try {
+				// Validate input
+				if (!(dateInput instanceof Date) || isNaN(dateInput)) {
+					throw new Error("Invalid Date object provided.");
+				}
+
+				// Use Intl.DateTimeFormat for language-sensitive formatting
+				const formatter = new Intl.DateTimeFormat('en-GB', {
+					weekday: 'short',   // Short day name
+					year: 'numeric',   // Full year
+					month: 'short',     // Short month name
+					day: 'numeric',     // Day of the month
+					hour: "2-digit",
+					minute: "2-digit",
+					second: "2-digit"
+				});
+
+				return formatter.format(dateInput);
+			} catch (error) {
+				return null;
+			}
+		}
+		function timeUpdate() {
+			if (baseTime == false) {
+				fetch("/api/v1/timedate").then(res => {
+					res.json().then(data => {
+						baseTime = new Date(data.iso_string);
+						document.getElementById("vn-lunar-date").textContent = data.lunar_vn_date_short
+					}).catch(e => { })
+				}).catch(e => { })
+			} else {
+				if (t <= 0) {
+					window.location.reload()
+				} else {
+					t--
+				}
+				baseTime.setSeconds(baseTime.getSeconds() + 1);
+			}
+			document.getElementById("current-time").textContent = formatLongDate(baseTime);
+			setTimeout(timeUpdate, 1000);
+		}
+		window.onload = async () => {
+			let content = await fetch("https://raw.githubusercontent.com/jerapiblaze/tapi/refs/heads/master/readme.md")
+			let markdown = await content.text();
+			document.getElementById('content').innerHTML = marked.parse(markdown);
+			let ip_content = await fetch("/api/v1/ipcheck")
+			let ip_data = await ip_content.json()
+			document.getElementById("user_ip").textContent = ip_data.user_ip
+			document.getElementById("user_city").textContent = ip_data.user_city
+			document.getElementById("user_country").textContent = ip_data.user_country
+			document.getElementById("user_asn").textContent = ip_data.user_asn
+			timeUpdate()
+		}
+	</script>
+</body>
+
+</html>
