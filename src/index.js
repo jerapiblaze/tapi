@@ -8,8 +8,29 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-export default {
-	async fetch(request, env, ctx) {
-		return new Response("Hello World!");
-	},
-};
+import { Hono } from 'hono'
+import { cors } from 'hono/cors'
+
+import { apiv1 } from './routes/api_v1/index.js'
+import { site } from './routes/site/index.js'
+
+const app = new Hono()
+
+app.use(
+	'/api/*',
+	cors({
+		origin: (origin, c) => {
+			return origin
+		},
+		// `c` is a `Context` object
+		allowMethods: (origin, c) => {
+			return ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE']
+		},
+		maxAge: 3600
+	})
+)
+
+app.route("/", site)
+app.route("/api/v1", apiv1)
+
+export default app

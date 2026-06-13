@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>YAOI-C</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 20px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			/* centers horizontally */
+			justify-content: center;
+			/* centers vertically */
+			min-height: 50vh;
+			text-align: center;
+			/* centers text inside elements */
+		}
+
+		.ip-banner {
+			font-size: 2em;
+			font-weight: bold;
+			padding: 15px 30px;
+			margin-bottom: 20px;
+			border-radius: 8px;
+		}
+
+		table {
+			border-collapse: collapse;
+			border-radius: 6px;
+			max-width: 80%;
+			margin: auto auto auto auto;
+			/* center table itself */
+		}
+
+		th,
+		td {
+			border: 1px solid #ccc;
+			padding: 8px 12px;
+		}
+
+		th {
+			background-color: #f4f4f4;
+		}
+
+		pre {
+			text-align: left;
+			display: inline-block;
+			background: #fff;
+			border: 1px solid #ccc;
+			padding: 15px;
+			border-radius: 6px;
+			max-width: 80%;
+			overflow-x: auto;
+		}
+
+		button {
+			background: linear-gradient(135deg, #4CAF50, #2E7D32);
+			color: #fff;
+			border: none;
+			border-radius: 6px;
+			padding: 10px 18px;
+			font-size: 16px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+		}
+
+		button:hover {
+			background: linear-gradient(135deg, #66BB6A, #388E3C);
+			transform: translateY(-2px);
+		}
+
+		button:active {
+			background: linear-gradient(135deg, #388E3C, #1B5E20);
+			transform: translateY(0);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="ip-banner">
+		Yet Another Online IP-Check (YAOI-C)<br>
+		<button class="button" id="toggleBtn"></button>
+	</div>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th>User_IP</th>
+					<th id="user_ip"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>User_City</td>
+					<td id="user_city"></td>
+				</tr>
+				<tr>
+					<td>User_Country</td>
+					<td id="user_country"></td>
+				</tr>
+				<tr>
+					<td>User_Region</td>
+					<td id="user_region"></td>
+				</tr>
+				<tr>
+					<td>User_Continent</td>
+					<td id="user_continent"></td>
+				</tr>
+				<tr>
+					<td>User_RegionCode</td>
+					<td id="user_regioncode"></td>
+				</tr>
+				<tr>
+					<td>User_ASN</td>
+					<td id="user_asn"></td>
+				</tr>
+				<tr>
+					<td>User_Org</td>
+					<td id="user_org"></td>
+				</tr>
+				<tr>
+					<td>User_PostalCode</td>
+					<td id="user_postalcode"></td>
+				</tr>
+				<tr>
+					<td>User_Timezone</td>
+					<td id="user_timezone"></td>
+				</tr>
+				<tr>
+					<td>User_Latitude</td>
+					<td id="user_latitude"></td>
+				</tr>
+				<tr>
+					<td>User_Longitude</td>
+					<td id="user_longitude"></td>
+				</tr>
+				<tr>
+					<td>User_IsCloudflareWarp</td>
+					<td id="user_iscfwarp"></td>
+				</tr>
+				<tr>
+					<td>User_UserAgent</td>
+					<td id="user_ua"></td>
+				</tr>
+				<tr>
+					<td>Cloudflare_Datacenter</td>
+					<td id="cf_datacenter"></td>
+				</tr>
+				<tr>
+					<td>Cloudflare_RayID</td>
+					<td id="cf_rayid"></td>
+				</tr>
+				<tr>
+					<td>Cloudflare_WorkerName</td>
+					<td id="cf_workername"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<p>
+		Try <a href="/ipcheck.api">json</a> for plain data output.
+	</p>
+
+	<div id="jsonContainer" style="display: none;">
+		<pre id="json">
+    </pre>
+	</div>
+
+	<script>
+		const btn = document.getElementById("toggleBtn");
+		const container = document.getElementById("jsonContainer");
+		btn.addEventListener("click", () => {
+			if (container.style.display === "none") {
+				container.style.display = "block";
+			} else {
+				container.style.display = "none";
+			}
+		});
+	</script>
+
+	<script>
+		let data = null;
+		window.onload = async () => {
+			if (window.location.toString().endsWith("#json")){
+				return window.location.replace("/api/v1/ipcheck")
+			}
+			let response = null;
+			let data = null;
+			try {
+				response = await fetch("/api/v1/ipcheck")
+				data = await response.json()
+			} catch (e) {
+				window.alert(`Get data failed: ${e.toString()}`)
+			}
+			document.getElementById("user_ip").textContent = data.user_ip
+			document.getElementById("toggleBtn").textContent = data.user_ip
+			document.getElementById("user_city").textContent = data.user_city
+			document.getElementById("user_country").textContent = data.user_country
+			document.getElementById("user_region").textContent = data.user_region
+			document.getElementById("user_continent").textContent = data.user_continent
+			document.getElementById("user_regioncode").textContent = data.user_regioncode
+			document.getElementById("user_asn").textContent = data.user_asn
+			document.getElementById("user_org").textContent = data.user_org
+			document.getElementById("user_postalcode").textContent = data.user_postalcode
+			document.getElementById("user_timezone").textContent = data.user_timezone
+			document.getElementById("user_latitude").textContent = data.user_latitude
+			document.getElementById("user_longitude").textContent = data.user_longitude
+			document.getElementById("user_iscfwarp").textContent = data.user_iscfwarp
+			document.getElementById("user_ua").textContent = data.user_ua
+			document.getElementById("cf_datacenter").textContent = data.cf_datacenter
+			document.getElementById("cf_rayid").textContent = data.cf_rayid
+			document.getElementById("cf_workername").textContent = data.cf_workername
+			document.getElementById("json").textContent = JSON.stringify(data, null, 2)
+			document.title = `${data.user_ip},${data.user_country}`
+		}
+	</script>
+</body>
+
+</html>

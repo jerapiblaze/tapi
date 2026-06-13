@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>TimeDate Manual Acknowledgement (TDMA)</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 20px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			/* centers horizontally */
+			justify-content: center;
+			/* centers vertically */
+			min-height: 50vh;
+			text-align: center;
+			/* centers text inside elements */
+		}
+
+		.banner {
+			font-size: 2em;
+			font-weight: bold;
+			padding: 15px 30px;
+			margin-bottom: 20px;
+			border-radius: 8px;
+		}
+
+		table {
+			border-collapse: collapse;
+			border-radius: 6px;
+			max-width: 80%;
+			margin: auto auto auto auto;
+			/* center table itself */
+		}
+
+		th,
+		td {
+			border: 1px solid #ccc;
+			padding: 8px 12px;
+		}
+
+		th {
+			background-color: #f4f4f4;
+		}
+
+		pre {
+			text-align: left;
+			display: inline-block;
+			background: #fff;
+			border: 1px solid #ccc;
+			padding: 15px;
+			border-radius: 6px;
+			max-width: 80%;
+			overflow-x: auto;
+		}
+
+		button {
+			background: linear-gradient(135deg, #4CAF50, #2E7D32);
+			color: #fff;
+			border: none;
+			border-radius: 6px;
+			padding: 10px 18px;
+			font-size: 16px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+		}
+
+		button:hover {
+			background: linear-gradient(135deg, #66BB6A, #388E3C);
+			transform: translateY(-2px);
+		}
+
+		button:active {
+			background: linear-gradient(135deg, #388E3C, #1B5E20);
+			transform: translateY(0);
+		}
+	</style>
+	<script>
+		var baseTime = false;
+		var t = 300;
+		function update() {
+			if (baseTime === false) {
+				fetch("/api/v1/timedate").then(res => {
+					res.json().then(data => {
+						baseTime = new Date(data.iso_string);
+						document.getElementById("iso_string").textContent = data.iso_string
+						document.getElementById("time_short").textContent = data.time_short
+						document.getElementById("date_short").textContent = data.date_short
+						document.getElementById("lunar_vn_date_short").textContent = data.lunar_vn_date_short
+						document.getElementById("timestamp_unix").textContent = data.timestamp_unix
+					}).catch(e => { })
+				}).catch(e => { })
+			} else {
+				if (t <= 0) {
+					window.location.reload();
+				} else {
+					t--;
+				}
+				baseTime.setSeconds(baseTime.getSeconds() + 1);
+			}
+			document.getElementById("toggleBtn").textContent = baseTime.toLocaleTimeString("en-GB", { hour12: false });
+		}
+		setInterval(update, 1000);
+		update();
+	</script>
+</head>
+
+<body>
+	<div class="banner">
+		TimeDate Manual Acknowledgement (TDMA)<br>
+		<button class="button" id="toggleBtn">${time_short}</button>
+	</div>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th>TimeDateISO</th>
+					<th id="iso_string">${iso_string}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Time</td>
+					<td id="time_short">${time_short}</td>
+				</tr>
+				<tr>
+					<td>Date</td>
+					<td id="date_short">${date_short}</td>
+				</tr>
+				<tr>
+					<td>Vietnamese Lunar Date</td>
+					<td id="lunar_vn_date_short">${lunar_vn_date_short}</td>
+				</tr>
+				<tr>
+					<td>TimestampUNIX</td>
+					<td id="timestamp_unix">${timestamp_unix}</td>
+				</tr>
+			</tbody>
+		</table>
+		<p>
+			The time received from my server is shown in the table. <br>
+			It is converted to your local time and displayed in the button above. <br>
+			To get raw, original data, click the button or access <a href="/timedate.api">json</a>. <br>
+			If something is not right, check the <a href="https://www.timeanddate.com/worldclock/" target="_blank">world
+				clock</a>.
+		</p>
+	</div>
+	<script>
+		const btn = document.getElementById("toggleBtn");
+		const container = document.getElementById("jsonContainer");
+		btn.addEventListener("click", () => {
+			window.location.reload();
+		});
+	</script>
+</body>
+
+</html>
