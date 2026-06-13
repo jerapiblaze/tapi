@@ -15,4 +15,4 @@ Web:
 
 Assets:
 
-- `/assets/static/js/vnlunar.js`: Converts date to VN_Lunar date.
+- `/assets/static/js/vnlunar.js`: Converts date to VN_Lunar date. Contains only one function `ConvertSolar2Lunar(dd, mm, yy, timeZone, addYear)`. Returns `dd/mm`. Remember to use `timeZone=7` for Vietnam. Use `addYear=True` to return `dd/mm/yyyy`.
