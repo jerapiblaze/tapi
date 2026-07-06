@@ -14,13 +14,23 @@ site.get("/:page", (c) => {
 	if (page === "index" || page === "index.html" || page === ""){
 		return c.env.ASSETS.fetch(new Request(`https://assets.local/static/html/index.html`))
 	}
-	return c.env.ASSETS.fetch(new Request(`https://assets.local/static/html/${page}`))
+	return c.env.ASSETS.fetch(new Request(`https://assets.local/static/html/${page}`, {
+		// enable caching for static pages
+		headers: {
+			"Cache-Control": "public, max-age=3600"
+		}
+	}))
 })
 
 site.get("/assets/*", (c) => {
 	const path = c.req.path.split("/").slice(2).join("/")
 	console.log(path)
-	return c.env.ASSETS.fetch(new Request(`https://assets.local/${path}`))
+	return c.env.ASSETS.fetch(new Request(`https://assets.local/${path}`, {
+		// enable caching for static pages
+		headers: {
+			"Cache-Control": "public, max-age=3600"
+		}
+	}))
 })
 
 

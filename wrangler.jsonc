@@ -10,6 +10,15 @@
 	"cache": {
 		"enabled": true,
 	},
+	"exports": {
+		// Opt the default entrypoint out of caching.
+		"default": {
+			"type": "worker",
+			"cache": {
+				"enabled": false
+			}
+		},
+	},
 	"observability": {
 		"enabled": true
 	},
