@@ -6,7 +6,10 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "tapi",
 	"main": "src/index.js",
-	"compatibility_date": "2026-06-07",
+	"compatibility_date": "2026-07-06",
+	"cache": {
+		"enabled": true,
+	},
 	"observability": {
 		"enabled": true
 	},
