@@ -8,23 +8,7 @@
 	"main": "src/index.js",
 	"compatibility_date": "2026-07-06",
 	"cache": {
-		"enabled": true,
-	},
-	"exports": {
-		// Opt the default entrypoint out of caching.
-		"default": {
-			"type": "worker",
-			"cache": {
-				"enabled": false
-			}
-		},
-		// Opt the API entrypoint out of caching.
-		"api": {
-			"type": "worker",
-			"cache": {
-				"enabled": false
-			}
-		}
+		"enabled": false,
 	},
 	"observability": {
 		"enabled": true
