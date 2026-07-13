@@ -18,6 +18,13 @@
 				"enabled": false
 			}
 		},
+		// Opt the API entrypoint out of caching.
+		"api": {
+			"type": "worker",
+			"cache": {
+				"enabled": false
+			}
+		}
 	},
 	"observability": {
 		"enabled": true
