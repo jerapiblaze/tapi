@@ -6,12 +6,14 @@ Routes:
 
 - `/api/v1/ipcheck`: Get IP address of current request.
 - `/api/v1/timedate`: Get current time and date of server.
+- `/api/v1/updates`: Set and get anything to the kv-cache.
 
 Web:
 
 - `/ipcheck`: YetAnotherOnlineIP-Check
 - `/timedate`: TimeDateManualAcknowledgement
 - `/ramdownload`: Online RAM Downloader
+- `/updates`: Updates from anything
 
 Assets:
 
