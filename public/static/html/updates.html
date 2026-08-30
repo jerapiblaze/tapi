@@ -28,11 +28,17 @@
 	// Example JavaScript to dynamically update the content
 	document.getElementById('content').innerText = 'TAPI Updates will be displayed here.';
 	let keyInput = "";
+	let lock = false;
 	// Get the key from the query first
 	const urlParams = new URLSearchParams(window.location.search);
 	const key = urlParams.get('key');
+	lock = urlParams.has('key') && urlParams.get('lock') === 'true';
 	if (key) {
 		document.getElementById('updateKey').value = key;
+	}
+	if (lock) {
+		document.getElementById('updateKey').disabled = true;
+		document.getElementById('updateButton').disabled = true;
 	}
 	// Add event listener for the update button
 	document.getElementById('updateButton').addEventListener('click', () => {
