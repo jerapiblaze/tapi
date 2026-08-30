@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>TAPI - Updates</title>
+</head>
+
+<body>
+	<p>
+		<input type="text" id="updateKey" placeholder="Enter key" />
+		<button id="updateButton">Set and Update</button>
+	</p>
+	<hr>
+	<div>
+	<p><span id="content"></span></p>
+	<hr>
+	<p style="font-family: monospace;">
+		Update time (browser) : <span id="timestamp-browser"></span><br>
+		Update time (server)  : <span id="timestamp-server"></span>
+	</p>
+	</div>
+</body>
+</html>
+
+<script>
+	// Example JavaScript to dynamically update the content
+	document.getElementById('content').innerText = 'TAPI Updates will be displayed here.';
+	let keyInput = "";
+	// Get the key from the query first
+	const urlParams = new URLSearchParams(window.location.search);
+	const key = urlParams.get('key');
+	if (key) {
+		document.getElementById('updateKey').value = key;
+	}
+	// Add event listener for the update button
+	document.getElementById('updateButton').addEventListener('click', () => {
+		keyInput = document.getElementById('updateKey').value;
+	});
+	// Update function
+	function updateContent() {
+		if (keyInput) {
+			document.title = `TAPI Updates - ${keyInput}`;
+			fetch(`/api/v1/updates/${keyInput}`)
+				.then(response => response.json())
+				.then(data => {
+					document.getElementById('content').innerText = data.value ? data.value : 'No update available.';
+					document.getElementById('timestamp-server').innerText = new Date(data.timestamp).toLocaleString();
+					document.getElementById('timestamp-browser').innerText = new Date().toLocaleString();
+				})
+				.catch(error => {
+					document.getElementById('content').innerText = `Error fetching updates: ${error}`;
+				});
+		} else {
+			document.getElementById('content').innerText = 'Please enter a key to update.';
+		}
+	}
+
+	document.getElementById('updateButton').addEventListener('click', () => {
+		keyInput = document.getElementById('updateKey').value;
+		// set query and reload
+		const newUrl = new URL(window.location.href);
+		newUrl.searchParams.set('key', keyInput);
+		window.location.href = newUrl.toString();
+	});
+
+	// auto initiate on load if a key is present in the query
+	if (key) {
+		keyInput = key;
+		updateContent();
+		setInterval(updateContent, 5000);
+	}
+</script>
