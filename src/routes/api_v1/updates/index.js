@@ -16,6 +16,7 @@ update.post('/:key?secret=:secret', async (c) => {
 	const key = c.req.param('key')
 	const secret = c.req.query('secret')
 	const correctSecret = await c.env.KV_UPDATE_SECRET.get('key')
+	console.log(`Key: ${key}, received secret: ${secret}, correct secret: ${correctSecret}`)
 	if (secret !== correctSecret) {
 		return c.json({ error: 'Invalid secret', timestamp: Date.now(), secret: secret }, 403)
 	}
