@@ -9,7 +9,11 @@ update.get('/:key', async (c) => {
 	if (value === null) {
 		return c.json({ error: 'Not found', timestamp: Date.now() }, 404)
 	}
-	return c.json({ key: key, value: value, timestamp: Date.now() });
+	const parsedValue = JSON.parse(value);
+	if (!parsedValue) {
+		return c.json({ error: 'Invalid value', timestamp: Date.now() }, 500)
+	}
+	return c.json({ key: key, value: parsedValue.value, timestamp: parsedValue.timestamp });
 })
 
 update.post('/:key?', async (c) => {
@@ -21,8 +25,12 @@ update.post('/:key?', async (c) => {
 	}
 	// value from body, can be anything
 	const value = await c.req.text()
-	await c.env.KV_UPDATE_CACHE.put(key, value)
-	return c.json({ key: key, timestamp: Date.now() });
+	const valueToPut = {
+		value: value,
+		timestamp: Date.now()
+	}
+	await c.env.KV_UPDATE_CACHE.put(key, JSON.stringify(valueToPut))
+	return c.json({ key: key, timestamp: valueToPut.timestamp });
 })
 
 export default update
