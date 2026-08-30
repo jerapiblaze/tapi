@@ -17,7 +17,8 @@
 	<hr>
 	<p style="font-family: monospace;">
 		Update time (browser) : <span id="timestamp-browser"></span><br>
-		Update time (server)  : <span id="timestamp-server"></span>
+		Update time (server)  : <span id="timestamp-server"></span><br>
+		Updates every 60 seconds.
 	</p>
 	</div>
 </body>
@@ -68,6 +69,6 @@
 	if (key) {
 		keyInput = key;
 		updateContent();
-		setInterval(updateContent, 5000);
+		setInterval(updateContent, 60000);
 	}
 </script>

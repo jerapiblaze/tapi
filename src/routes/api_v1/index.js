@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 
 import { ipcheck } from './ipcheck'
 import { dt } from './timedate'
-import update from './update'
+import update from './updates'
 
 const apiv1 = new Hono()
 
