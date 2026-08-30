@@ -19,7 +19,8 @@ update.post('/:key?secret=:secret', async (c) => {
 	if (secret !== correctSecret) {
 		return c.json({ error: 'Invalid secret', timestamp: Date.now() }, 403)
 	}
-	const value = await c.req.json()
+	// value from body, can be anything
+	const value = await c.req.text()
 	await c.env.KV_UPDATE_CACHE.put(key, value)
 	return c.json({ key: key, timestamp: Date.now() });
 })
