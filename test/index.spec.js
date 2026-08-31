@@ -22,4 +22,27 @@ describe("Hello World worker", () => {
 		const response = await SELF.fetch("http://example.com");
 		expect(await response.text()).toMatchInlineSnapshot(`"Hello World!"`);
 	});
+
+	it("allows unsecured reads but rejects unsecured writes", async () => {
+		const key = crypto.randomUUID();
+		const ctx = createExecutionContext();
+
+		const readResponse = await worker.fetch(
+			new Request(`http://example.com/api/v1/updates/${key}`),
+			env,
+			ctx,
+		);
+		const writeResponse = await worker.fetch(
+			new Request(`http://example.com/api/v1/updates/${key}`, {
+				method: "POST",
+				body: "value",
+			}),
+			env,
+			ctx,
+		);
+
+		await waitOnExecutionContext(ctx);
+		expect(readResponse.status).toBe(404);
+		expect(writeResponse.status).toBe(403);
+	});
 });

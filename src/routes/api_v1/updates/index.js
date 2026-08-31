@@ -3,15 +3,16 @@ import { Hono } from 'hono'
 const update = new Hono()
 const encoder = new TextEncoder()
 
-async function secretsMatch(providedSecret, expectedSecret) {
+async function secretsMatch(providedSecret, expectedSecret, { allowMissingSecret = false } = {}) {
 	const [providedHash, expectedHash] = await Promise.all([
 		crypto.subtle.digest('SHA-256', encoder.encode(providedSecret ?? '')),
 		crypto.subtle.digest('SHA-256', encoder.encode(expectedSecret ?? ''))
 	])
 
-	return typeof providedSecret === 'string'
-		&& typeof expectedSecret === 'string'
-		&& crypto.subtle.timingSafeEqual(providedHash, expectedHash)
+	return (allowMissingSecret && providedSecret == null && expectedSecret == null)
+		|| (typeof providedSecret === 'string'
+			&& typeof expectedSecret === 'string'
+			&& crypto.subtle.timingSafeEqual(providedHash, expectedHash))
 }
 
 update.get('/:key?', async (c) => {
@@ -22,7 +23,7 @@ update.get('/:key?', async (c) => {
 	const secret = c.req.query('secret')
 	// get read secret for the key
 	const correctSecret = await c.env.KV_UPDATE_SECRET.get(`${key}:r`)
-	if (!(await secretsMatch(secret, correctSecret))) {
+	if (!(await secretsMatch(secret, correctSecret, { allowMissingSecret: true }))) {
 		return c.json({ error: 'Invalid secret', key: key, timestamp: Date.now() }, 403)
 	}
 	const value = await c.env.KV_UPDATE_CACHE.get(key);
