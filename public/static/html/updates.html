@@ -10,7 +10,8 @@
 	<div>
 	<p>
 		<input type="text" id="updateKey" placeholder="Enter key" />
-		<button id="updateButton">Set and Update</button>
+		<input type="text" id="updateSecret" placeholder="Enter secret" />
+		<button id="updateButton">Set</button>
 	</p>
 	</div>
 	<hr><br>
@@ -28,10 +29,12 @@
 	// Example JavaScript to dynamically update the content
 	document.getElementById('content').innerText = 'TAPI Updates will be displayed here.';
 	let keyInput = "";
+	let secretInput = "";
 	let lock = false;
 	// Get the key from the query first
 	const urlParams = new URLSearchParams(window.location.search);
 	const key = urlParams.get('key');
+	const secret = urlParams.get('secret');
 	lock = urlParams.has('key') && urlParams.get('lock') === 'true';
 	if (key) {
 		document.getElementById('updateKey').value = key;
@@ -39,16 +42,19 @@
 	if (lock) {
 		document.getElementById('updateKey').disabled = true;
 		document.getElementById('updateButton').disabled = true;
+		document.getElementById('updateSecret').disabled = true;
 	}
 	// Add event listener for the update button
 	document.getElementById('updateButton').addEventListener('click', () => {
 		keyInput = document.getElementById('updateKey').value;
+		secretInput = document.getElementById('updateSecret').value;
 	});
 	// Update function
 	function updateContent() {
 		if (keyInput) {
 			document.title = `TAPI Updates - ${keyInput}`;
-			fetch(`/api/v1/updates/${keyInput}`)
+			const uri = secretInput ? `/api/v1/updates/${keyInput}?secret=${secretInput}` : `/api/v1/updates/${keyInput}`;
+			fetch(uri)
 				.then(response => response.json())
 				.then(data => {
 					document.getElementById('content').innerText = data.value ? data.value : 'No update available.';
@@ -68,6 +74,7 @@
 		// set query and reload
 		const newUrl = new URL(window.location.href);
 		newUrl.searchParams.set('key', keyInput);
+		newUrl.searchParams.set('secret', secretInput);
 		window.location.href = newUrl.toString();
 	});
 
