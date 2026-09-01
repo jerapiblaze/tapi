@@ -71,6 +71,7 @@
 				})
 				.catch(error => {
 					document.getElementById('content').innerText = `Error fetching updates: ${error}`;
+					document.getElementById('updateStatus').innerText = 'Error fetching updates!';
 				});
 		} else {
 			document.getElementById('content').innerText = 'Please enter a key to update.';
