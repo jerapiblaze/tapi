@@ -20,6 +20,7 @@
 	</div>
 	<hr><br>
 	<div>
+	<p style="white-space: pre-wrap; font-family: monospace;"><span id="updateStatus"></span></p>
 	<p style="white-space: pre-wrap; font-family: monospace;">Update time (browser) : <span id="timestamp-browser"></span><br>Update time (server)  : <span id="timestamp-server"></span><br>Updates every 60 seconds.</p>
 	</div>
 </body>
@@ -57,9 +58,16 @@
 			fetch(uri)
 				.then(response => response.json())
 				.then(data => {
+					let timeBrowser = new Date();
+					let timeServer = new Date(data.timestamp);
 					document.getElementById('content').innerText = data.value ? data.value : 'No update available.';
-					document.getElementById('timestamp-server').innerText = new Date(data.timestamp).toLocaleString();
-					document.getElementById('timestamp-browser').innerText = new Date().toLocaleString();
+					document.getElementById('timestamp-server').innerText = timeServer.toLocaleString();
+					document.getElementById('timestamp-browser').innerText = timeBrowser.toLocaleString();
+					if (Math.abs(timeBrowser - timeServer) > 3600000) {
+						document.getElementById('updateStatus').innerText = 'Out-of-date: ' + Math.abs(timeBrowser - timeServer) / 3600000 + ' hours difference!';
+					} else {
+						document.getElementById('updateStatus').innerText = 'Up-to-date.';
+					}
 				})
 				.catch(error => {
 					document.getElementById('content').innerText = `Error fetching updates: ${error}`;
