@@ -20,7 +20,7 @@
 			"destinations": [
 				"amsteeracle02-logs"
 			],
-			"persist": false
+			"persist": true
 		},
 		"traces": {
 			"enabled": true,
@@ -28,7 +28,7 @@
 			"destinations": [
 				"amsteeracle02-traces"
 			],
-			"persist": false
+			"persist": true
 		}
 	},
 	"upload_source_maps": true,
