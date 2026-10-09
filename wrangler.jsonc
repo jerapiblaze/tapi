@@ -10,8 +10,21 @@
 	"cache": {
 		"enabled": false
 	},
+	// ...
 	"observability": {
-		"enabled": true
+		"enabled": true,
+		"head_sampling_rate": 1,
+		"logs": {
+			"enabled": true,
+			"head_sampling_rate": 1,
+			"invocation_logs": true,
+			"persist": false
+		},
+		"traces": {
+			"enabled": false,
+			"head_sampling_rate": 1,
+			"persist": true
+		}
 	},
 	"upload_source_maps": true,
 	"compatibility_flags": [
