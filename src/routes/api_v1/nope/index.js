@@ -1,0 +1,25 @@
+import { Hono } from 'hono'
+
+const nope = new Hono()
+
+nope.get("/", async (c) => {
+	const data = await c.env.KV_NOPE_CACHE.get("nope_cache")
+	// convert the cached data from JSON string to object
+	const parsedData = data ? JSON.parse(data) : null
+	// Get random number from the parsed data, if available
+	const randomIndex = parsedData ? Math.floor(Math.random() * parsedData.length)+1 : null
+	if (randomIndex !== null && randomIndex <= parsedData.length - 1) {
+		const randomItem = parsedData[randomIndex]
+		return c.json({ "reason": randomItem, "cacheHit": true, "randomInt": randomIndex })
+	} else {
+		// make request to NaaS API: https://naas.isalman.dev/no
+		const response = await fetch("https://naas.isalman.dev/no")
+		const naasData = await response.json()
+		// append cache the response in KV_NOPE_CACHE
+		const updatedData = parsedData ? [...parsedData, naasData.reason] : [naasData.reason]
+		await c.env.KV_NOPE_CACHE.put("nope_cache", JSON.stringify(updatedData))
+		return c.json({ "reason": naasData.reason, "cacheHit": false, "randomInt": randomIndex })
+	}
+})
+
+export { nope }

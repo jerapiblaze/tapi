@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nope</title>
+</head>
+<body>
+    <h1>Nope</h1>
+    <p>Random reason to say "No". Powered by <a href="https://naas.isalman.dev" target="_blank">No-as-a-Service (NaaS)</a></p>
+    <button id="get-reason">Get Random Reason</button>
+	<button id="copy-reason">Copy Reason</button>
+	<button id="copy-raw">Copy Raw Data</button>
+	<!-- Fixed text box for reason details -->
+	<p>
+		<textarea id="reason" rows="4" cols="50" readonly placeholder="Reason to say 'No'" style="resize: none;"></textarea>
+	</p>
+	<p>
+		<code id="reason-details">
+			Cache Hit: <span id="cache-hit">None</span>
+			| Random Index: <span id="random-index">None</span>
+		</code>
+	</p>
+	<p>
+		You can use the `<code>/api/v1/nope</code>` endpoint to get a random reason to say "No".
+	</p>
+    <script>
+        document.getElementById('get-reason').addEventListener('click', async () => {
+            const response = await fetch('/api/v1/nope');
+            const data = await response.json();
+            document.getElementById('reason').textContent = data.reason;
+            document.getElementById('cache-hit').textContent = `${data.cacheHit}`;
+            document.getElementById('random-index').textContent = `${data.randomInt}`;
+        });
+    </script>
+    <script>
+        document.getElementById('copy-reason').addEventListener('click', () => {
+            const reasonText = document.getElementById('reason').value;
+			if (!reasonText) {
+				return;
+			}
+            navigator.clipboard.writeText(reasonText);
+			alert('Reason "' + reasonText + '" copied to clipboard!');
+        });
+    </script>
+    <script>
+        document.getElementById('copy-raw').addEventListener('click', () => {
+            const reasonText = document.getElementById('reason').value;
+			if (!reasonText) {
+				return;
+			}
+            navigator.clipboard.writeText(JSON.stringify({
+                reason: reasonText,
+                cacheHit: document.getElementById('cache-hit').textContent,
+                randomInt: document.getElementById('random-index').textContent
+            }));
+			alert('Raw data copied to clipboard!\n' + JSON.stringify({
+                reason: reasonText,
+                cacheHit: document.getElementById('cache-hit').textContent,
+                randomInt: document.getElementById('random-index').textContent
+            }));
+        });
+    </script>
+</body>
+</html>

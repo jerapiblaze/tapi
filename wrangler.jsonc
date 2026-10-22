@@ -84,6 +84,10 @@
 		{
 			"binding": "KV_UPDATE_SECRET",
 			"id": "4be335a9304f4061819fb107649e93cb"
+		},
+		{
+			"binding": "KV_NOPE_CACHE",
+			"id": "62ac614e3c4b45efbd9f78b4000742ab"
 		}
 	]
 }
