@@ -17,6 +17,10 @@ nope.get("/", async (c) => {
 		const naasData = await response.json()
 		// append cache the response in KV_NOPE_CACHE
 		const updatedData = parsedData ? [...parsedData, naasData.reason] : [naasData.reason]
+		// drop the oldest item if the cache exceeds a certain size (e.g., 1024 items)
+		if (updatedData.length > 1024) {
+			updatedData.shift()
+		}
 		await c.env.KV_NOPE_CACHE.put("nope_cache", JSON.stringify(updatedData))
 		return c.json({ "reason": naasData.reason, "cacheHit": false, "randomInt": randomIndex })
 	}
