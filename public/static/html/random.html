@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Random Value</title>
+</head>
+
+<body>
+	<div style="text-align: center;">
+		<h1>Random Value</h1>
+		<p>Random value from 0 to 1. Powered by <a href="https://www.cloudflare.com/leagueofentropy/" target="_blank">Cloudflare's League of Entropy</a>.</p>
+		<button id="get-value">Get Random Value</button>
+		<button id="copy-value">Copy Value</button>
+		<!-- Fixed text box for reason details -->
+		<p>
+			<textarea id="value" rows="1" cols="50" readonly placeholder="Random value from 0 to 1" style="text-align: center; resize: none;"></textarea>
+		</p>
+		<p>
+			Click the "Get Random Value" button to fetch a new value.<br> You
+			can use the `<code>/api/v1/random</code>` endpoint to get a random value from 0 to 1.
+		</p>
+	</div>
+	<script>
+		document.getElementById('get-value').addEventListener('click', async () => {
+			document.getElementById('value').textContent = 'Thinking...';
+			const response = await fetch('/api/v1/random');
+			const data = await response.json();
+			document.getElementById('value').textContent = data.randomValue;
+			document.getElementById('cache-hit').textContent = `${data.cacheHit}`;
+			document.getElementById('random-index').textContent = `${data.randomInt}`;
+		});
+	</script>
+	<script>
+		document.getElementById('copy-value').addEventListener('click', () => {
+			const valueText = document.getElementById('value').textContent;
+			if (!valueText) {
+				return;
+			}
+			navigator.clipboard.writeText(valueText);
+			alert('Value "' + valueText + '" copied to clipboard!');
+		});
+	</script>
+</body>
+
+</html>

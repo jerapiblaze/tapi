@@ -59,4 +59,4 @@ update.post('/:key?', async (c) => {
 	return c.json({ key: key, timestamp: valueToPut.timestamp });
 })
 
-export default update
+export { update }
