@@ -8,7 +8,8 @@ nope.get("/", async (c) => {
 	const parsedData = data ? JSON.parse(data) : null
 	// Get random number from the parsed data, if available
 	const randomIndex = parsedData ? Math.floor(Math.random() * parsedData.length)+1 : null
-	if (randomIndex !== null && randomIndex <= parsedData.length - 1) {
+	const randomValue = Math.random()
+	if (randomIndex !== null && randomIndex <= parsedData.length - 1 || randomValue < 0.5) {
 		const randomItem = parsedData[randomIndex]
 		return c.json({ "reason": randomItem, "cacheHit": true, "randomInt": randomIndex })
 	} else {
