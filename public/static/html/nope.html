@@ -22,7 +22,7 @@
 		</code>
 	</p>
 	<p>
-		You can use the `<code>/api/v1/nope</code>` endpoint to get a random reason to say "No".
+		Click the "Get Random Reason" button to fetch a new reason. There is 50% chance to miss the cache. You can use the `<code>/api/v1/nope</code>` endpoint to get a random reason to say "No".
 	</p>
     <script>
         document.getElementById('get-reason').addEventListener('click', async () => {
@@ -36,7 +36,7 @@
     </script>
     <script>
         document.getElementById('copy-reason').addEventListener('click', () => {
-            const reasonText = document.getElementById('reason').value;
+            const reasonText = document.getElementById('reason').textContent;
 			if (!reasonText) {
 				return;
 			}
@@ -46,7 +46,7 @@
     </script>
     <script>
         document.getElementById('copy-raw').addEventListener('click', () => {
-            const reasonText = document.getElementById('reason').value;
+            const reasonText = document.getElementById('reason').textContent;
 			if (!reasonText) {
 				return;
 			}
