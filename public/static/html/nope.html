@@ -26,6 +26,7 @@
 	</p>
     <script>
         document.getElementById('get-reason').addEventListener('click', async () => {
+			document.getElementById('reason').textContent = 'Thinking...';
             const response = await fetch('/api/v1/nope');
             const data = await response.json();
             document.getElementById('reason').textContent = data.reason;
