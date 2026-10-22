@@ -8,6 +8,7 @@ Routes:
 - `/api/v1/timedate`: Get current time and date of server.
 - `/api/v1/updates`: Set and get anything to the kv-cache.
 - `/api/v1/nope`: Return a random reason to say "No". Powered by [No-as-a-Service](https://github.com/hotheadhacker/no-as-a-service).
+- `/api/v1/random`: Return a random number in range 0 to 1. Powered by [Cloudflare's League of Entropy](https://www.cloudflare.com/leagueofentropy/).
 
 Web:
 
@@ -16,6 +17,7 @@ Web:
 - `/ramdownload`: Online RAM Downloader
 - `/updates`: Updates from anything
 - `/nope`: Nope-as-a-Service
+- `/random`: RandomValue
 
 Assets:
 
