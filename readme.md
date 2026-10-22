@@ -7,6 +7,7 @@ Routes:
 - `/api/v1/ipcheck`: Get IP address of current request.
 - `/api/v1/timedate`: Get current time and date of server.
 - `/api/v1/updates`: Set and get anything to the kv-cache.
+- `/api/v1/nope`: Return a random reason to say "No". Powered by [No-as-a-Service](https://github.com/hotheadhacker/no-as-a-service).
 
 Web:
 
@@ -14,6 +15,7 @@ Web:
 - `/timedate`: TimeDateManualAcknowledgement
 - `/ramdownload`: Online RAM Downloader
 - `/updates`: Updates from anything
+- `/nope`: Nope-as-a-Service
 
 Assets:
 
