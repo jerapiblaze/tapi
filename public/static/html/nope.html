@@ -6,6 +6,7 @@
     <title>Nope</title>
 </head>
 <body>
+	<div style="text-align: center;">
     <h1>Nope</h1>
     <p>Random reason to say "No". Powered by <a href="https://github.com/hotheadhacker/no-as-a-service" target="_blank">No-as-a-Service (NaaS)</a></p>
     <button id="get-reason">Get Random Reason</button>
@@ -22,8 +23,9 @@
 		</code>
 	</p>
 	<p>
-		Click the "Get Random Reason" button to fetch a new reason. There is 50% chance to miss the cache. You can use the `<code>/api/v1/nope</code>` endpoint to get a random reason to say "No".
+		Click the "Get Random Reason" button to fetch a new reason. There is 50% chance to miss the cache.<br> You can use the `<code>/api/v1/nope</code>` endpoint to get a random reason to say "No".
 	</p>
+	</div>
     <script>
         document.getElementById('get-reason').addEventListener('click', async () => {
 			document.getElementById('reason').textContent = 'Thinking...';
